@@ -1,0 +1,30 @@
+#include<stdio.h>
+
+void While(int x)
+{
+    while(x>5)
+    {
+        printf("\ngreater");
+        return;
+    }
+    printf("\nsmaller");
+}
+
+void If(int x)
+{
+    if(x>5)
+    {
+        printf("\ngreater");
+    }else{
+        printf("\nsmaller");
+    }
+}
+
+int main()
+{
+    int x = 7;
+
+    While(x);
+    If(x);
+    return 0;
+}
