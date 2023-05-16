@@ -1,0 +1,78 @@
+package CD;
+import java.util.*;
+
+class LeftRecursionRemover {
+    private static List<String> p;
+    public static void main(String[] args) {
+        p = new ArrayList<>();
+
+        // Input grammar with left recursion
+        p.add("E=E+T");
+        p.add("E=T");
+        p.add("T=T*F");
+        p.add("T=F");
+        p.add("F=(E)");
+        p.add("F=i");
+
+        // Remove left recursion
+        List<String> mp = removeLeftRecursion();
+
+        // Print the modified p
+        System.out.println("Modified Productions:");
+        for (String production : mp) System.out.println(production);
+    }
+
+    private static List<String> removeLeftRecursion() {
+        List<String> modifiedProductions = new ArrayList<>();
+        int count = 1;
+
+        for (int i = 0; i < p.size(); i++) {
+            String production = p.get(i);
+            String[] parts = production.split("=");
+            String nonTerminal = parts[0];
+            String expression = parts[1];
+
+            String[] terms = expression.split("\\|");
+
+            List<String> newProductions = new ArrayList<>();
+            List<String> recursiveProductions = new ArrayList<>();
+
+            for (String term : terms) {
+                if (term.startsWith(nonTerminal)) {
+                    recursiveProductions.add(term.substring(nonTerminal.length()));
+                } else {
+                    newProductions.add(term);
+                }
+            }
+
+            if (recursiveProductions.isEmpty()) {
+                modifiedProductions.add(production);
+            } else {
+                String newNonTerminal = nonTerminal + "'";
+                StringBuilder sb1 = new StringBuilder();
+                StringBuilder sb2 = new StringBuilder();
+
+                for (String a : newProductions) {
+                    sb1.append(a).append(newNonTerminal).append("|");
+                }
+
+                for (String a : recursiveProductions) {
+                    sb2.append(a).append(newNonTerminal).append("|");
+                }
+
+                if (sb1.length() > 0) {
+                    sb1.deleteCharAt(sb1.length() - 1);
+                }
+
+                if (sb2.length() > 0) {
+                    sb2.deleteCharAt(sb2.length() - 1);
+                }
+
+                modifiedProductions.add(nonTerminal + "=" + sb1.toString());
+                modifiedProductions.add(newNonTerminal + "=" + sb2.toString() + newNonTerminal + "|ε");
+                count++;
+            }
+        }
+        return modifiedProductions;
+    }
+}
