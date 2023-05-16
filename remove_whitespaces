@@ -1,0 +1,35 @@
+package CD;
+
+public class RemoveWhiteSpace {
+
+    public static void main(String[] args) {
+        int i, n, j;
+
+        String prgm = " /* Test program */ \n"
+                + "   int main()  \n"
+                + "   {           \n"
+                + "      // variable declaration \n"
+                + "      int a, b, c;    \n"
+                + "      /* This is a test  \n"
+                + "          multiline     \n"
+                + "          comment for   \n"
+                + "          testing */      \n"
+                + "      a = b + c;       \n"
+                + "   }";
+
+        n = prgm.length();
+        System.out.println("Given program:");
+        System.out.println(prgm);
+
+        StringBuilder modifiedProgram = new StringBuilder();
+        for (i = 0; i < n; i++) {
+            if (prgm.charAt(i) != ' ') {
+                modifiedProgram.append(prgm.charAt(i));
+            }
+        }
+
+        System.out.println("Modified program is:");
+        System.out.println(modifiedProgram.toString());
+    }
+}
+
