@@ -1,0 +1,60 @@
+package CD;
+public class RemoveComments {
+
+    public static void main(String[] args) {
+        String prgm = " /* Test program */ \n"
+                + "   int main()  \n"
+                + "   {           \n"
+                + "      // variable declaration \n"
+                + "      int a, b, c;    \n"
+                + "      /* This is a test  \n"
+                + "          multiline     \n"
+                + "          comment for   \n"
+                + "          testing */      \n"
+                + "      a = b + c;       \n"
+                + "   }";
+
+        System.out.println("Given program:");
+        System.out.println(prgm);
+        System.out.println("Modified program is:");
+        System.out.println(removeComment(prgm));
+    }
+
+    public static String removeComment(String src) {
+        StringBuilder res = new StringBuilder();
+        boolean inSingleLineComment = false;
+        boolean inMultiLineComment = false;
+        int len = src.length();
+
+        for (int i = 0; i < len; i++) {
+            char currentChar = src.charAt(i);
+            if (inSingleLineComment) {
+                if (currentChar == '\n') {
+                    inSingleLineComment = false;
+                }
+            } else if (inMultiLineComment) {
+                if (currentChar == '*' && i < len - 1 && src.charAt(i + 1) == '/') {
+                    inMultiLineComment = false;
+                    i++; // Skip the next character '/'
+                }
+            } else {
+                if (currentChar == '/' && i < len - 1) {
+                    char nextChar = src.charAt(i + 1);
+                    if (nextChar == '/') {
+                        inSingleLineComment = true;
+                        i++; // Skip the next character '/'
+                    } else if (nextChar == '*') {
+                        inMultiLineComment = true;
+                        i++; // Skip the next character '*'
+                    } else {
+                        res.append(currentChar);
+                    }
+                } else {
+                    res.append(currentChar);
+                }
+            }
+        }
+
+        return res.toString();
+    }
+}
