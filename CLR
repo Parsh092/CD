@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+// Token types
+typedef enum {
+    INTEGER,
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    END
+} TokenType;
+
+// Token structure
+typedef struct {
+    TokenType type;
+    int value;
+} Token;
+
+// Function to get the next token from input
+Token getNextToken() {
+    Token token;
+
+    // Implementation specific to your lexer
+    // Read the input and identify the token type
+    // Assign the token type and value accordingly
+
+    return token;
+}
+
+// Function to perform parsing and evaluate the expression
+int parseExpression();
+
+// Function to handle parsing errors
+void handleError(const char* errorMsg) {
+    printf("Parsing Error: %s\n", errorMsg);
+    exit(1);
+}
+
+// Grammar rules
+int parseFactor() {
+    Token token = getNextToken();
+
+    if (token.type == INTEGER) {
+        return token.value;
+    } else if (token.type == SUB) {
+        return -parseFactor();
+    } else {
+        handleError("Invalid factor");
+    }
+}
+
+int parseTerm() {
+    int result = parseFactor();
+    Token token = getNextToken();
+
+    while (token.type == MUL || token.type == DIV) {
+        if (token.type == MUL) {
+            result *= parseFactor();
+        } else {
+            int divisor = parseFactor();
+            if (divisor == 0) {
+                handleError("Division by zero");
+            }
+            result /= divisor;
+        }
+        token = getNextToken();
+    }
+
+    return result;
+}
+
+int parseExpression() {
+    return parseTerm();
+}
+
+bool parse() {
+    Token token = getNextToken();
+    int result = parseExpression();
+
+    if (token.type != END) {
+        handleError("Unexpected tokens after the expression");
+    }
+
+    printf("Result: %d\n", result);
+
+    return true;
+}
+
+int main() {
+    parse();
+
+    return 0;
+}
