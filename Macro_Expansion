@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define LENGTH 10
+#define BREADTH 20
+int main()
+{
+    int area_rectangle = 0;
+    area_rectangle = LENGTH * BREADTH;
+    printf("Area of Rectangle = %d\n",area_rectangle);
+    system("PAUSE"); 
+    return 0;
+}
