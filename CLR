@@ -93,3 +93,20 @@ int main() {
 
     return 0;
 }
+
+/*
+Ouput 1:
+
+Shift 1
+Shift 2
+Reduce by 0
+Goto 1
+Shift 3
+Shift 4
+Parsing Successful
+Input is valid
+
+Output for string "ab"
+Parsing Error
+Input is invalid
+*/
