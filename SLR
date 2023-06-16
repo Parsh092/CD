@@ -98,7 +98,7 @@ bool slrParser(const char* input) {
 }
 
 int main() {
-    const char* input = "ab";
+    const char* input = "abab";
 
     if (slrParser(input)) {
         printf("Input is valid\n");
