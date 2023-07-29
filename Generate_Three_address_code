@@ -1,61 +1,36 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+import java.util.Stack;
 
-int tempCount = 0;
-
-char *generateTemp()
-{
-    char *temp = (char *)malloc(4 * sizeof(char));
-    sprintf(temp, "t%d", tempCount++);
-    return temp;
-}
-
-void generateThreeAddressCode(char *expression)
-{
-    int len = strlen(expression);
-    char *result = generateTemp();
-    char *operand1 = (char *)malloc(len * sizeof(char));
-    char *operand2 = (char *)malloc(len * sizeof(char));
-
-    int i = 0, j = 0;
-    while (expression[i] != '+' && expression[i] != '-' && expression[i] != '*' && expression[i] != '/')
-    {
-        operand1[j++] = expression[i++];
+public class ThreeAddressCodeGenerator {
+    
+    public static boolean isOperator(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/';
     }
-    operand1[j] = '\0';
-
-    char operator= expression[i++];
-
-    j = 0;
-    while (i < len)
-    {
-        operand2[j++] = expression[i++];
+    
+    public static String generateThreeAddressCode(String postfixExpr) {
+        Stack<String> stack = new Stack<>();
+        int tempVarCount = 1;
+        
+        for (char token : postfixExpr.toCharArray()) {
+            if (Character.isLetter(token)) {
+                stack.push(Character.toString(token));
+            } else if (isOperator(token)) {
+                String operand2 = stack.pop();
+                String operand1 = stack.pop();
+                String tempVar = "T" + tempVarCount++;
+                
+                String code = tempVar + " = " + operand1 + " " + token + " " + operand2;
+                stack.push(tempVar);
+                
+                System.out.println(code);
+            }
+        }
+        
+        return stack.pop();
     }
-    operand2[j] = '\0';
-
-    printf("%s = %s %c %s\n", result, operand1, operator, operand2);
-
-    free(result);
-    free(operand1);
-    free(operand2);
+    
+    public static void main(String[] args) {
+        String postfixExpression = "AB+CD-*";
+        System.out.println("Three-address code:");
+        generateThreeAddressCode(postfixExpression);
+    }
 }
-
-int main()
-{
-    char expression[100];
-
-    printf("Enter the arithmetic expression: ");
-    fgets(expression, sizeof(expression), stdin);
-
-    // Remove newline character
-    expression[strcspn(expression, "\n")] = '\0';
-
-    generateThreeAddressCode(expression);
-
-    return 0;
-}
-
-Output:
-Enter the arithmetic expression: a+b
-t0 = a + b
